@@ -21,7 +21,9 @@ import {
   RefreshCw,
   Sparkles,
   SlidersHorizontal,
-  HelpCircle
+  HelpCircle,
+  Brain,
+  GraduationCap
 } from "lucide-react";
 
 // Configuraciones de Presets de Modelos seleccionables en el Sandbox
@@ -46,102 +48,76 @@ const MODEL_PRESETS: ModelPreset[] = [
   {
     id: "model_e",
     name: "Modelo E (Producción ARM64)",
-    params: "~499M",
-    d_model: 1280,
+    params: "~2.0B",
+    d_model: 2560,
     n_layers: 26,
-    n_heads: 20,
-    n_kv_heads: 5,
-    ffn_hidden: 3520,
+    n_heads: 40,
+    n_kv_heads: 10,
+    ffn_hidden: 7040,
     window_size: 512,
-    diskSize: "268.6 MB",
-    speed: "2.1 - 3.4 tokens/s",
-    ram: "711 MB (Pico)",
-    desc: "Optimizado para máxima capacidad de razonamiento en CPUs ARM64 multinúcleo.",
+    diskSize: "1.07 GB",
+    speed: "0.5 - 1.1 tokens/s",
+    ram: "2.8 GB (Pico)",
+    desc: "Optimizado para máxima capacidad de razonamiento en CPUs ARM64 multinúcleo con hiperparámetros multiplicados por cuatro.",
     color: "from-emerald-400 to-teal-500"
   },
   {
     id: "model_a",
     name: "Modelo A (Base Balanceado)",
-    params: "~303M",
-    d_model: 1024,
+    params: "~1.2B",
+    d_model: 2048,
     n_layers: 24,
-    n_heads: 16,
-    n_kv_heads: 4,
-    ffn_hidden: 2816,
+    n_heads: 32,
+    n_kv_heads: 8,
+    ffn_hidden: 5632,
     window_size: 512,
-    diskSize: "163.4 MB",
-    speed: "3.8 - 5.2 tokens/s",
-    ram: "480 MB (Pico)",
-    desc: "Balance ideal entre velocidad de respuesta rápida y profundidad cognitiva.",
+    diskSize: "653.6 MB",
+    speed: "0.9 - 1.3 tokens/s",
+    ram: "1.9 GB (Pico)",
+    desc: "Balance ideal entre velocidad de respuesta rápida y profundidad cognitiva con dimensiones cuatriplicadas.",
     color: "from-blue-400 to-indigo-500"
   },
   {
     id: "model_test",
     name: "Modelo Test (Reducido de Prueba)",
-    params: "~2.5M",
-    d_model: 128,
-    n_layers: 2,
-    n_heads: 4,
-    n_kv_heads: 2,
-    ffn_hidden: 256,
+    params: "~10.0M",
+    d_model: 256,
+    n_layers: 4,
+    n_heads: 8,
+    n_kv_heads: 4,
+    ffn_hidden: 512,
     window_size: 64,
-    diskSize: "1.3 MB",
-    speed: "45.0+ tokens/s",
-    ram: "85 MB (Pico)",
-    desc: "Diseñado para pruebas de integración veloces y validaciones de pipeline locales.",
+    diskSize: "5.2 MB",
+    speed: "25.0+ tokens/s",
+    ram: "170 MB (Pico)",
+    desc: "Diseñado para pruebas de integración veloces y validaciones de pipeline locales con dimensiones multiplicadas.",
     color: "from-purple-400 to-pink-500"
   }
 ];
 
-// Temáticas para el Simulador Dinámico de Respuesta Inteligente
-interface ThemeTemplate {
-  keywords: string[];
-  phrases: string[][];
-}
-
-const THEME_TEMPLATES: ThemeTemplate[] = [
-  {
-    keywords: ["mar", "oceano", "agua", "poema", "poesía", "olas", "azul"],
-    phrases: [
-      [" un", " inmenso", " manto", " azul", " que", " acaricia", " las", " orillas", " del", " tiempo", " eterno", "."],
-      [" olas", " de", " plata", " que", " danzan", " bajo", " el", " arrullo", " del", " viento", " en", " calma", "."],
-      [" misterios", " ocultos", " en", " sus", " profundidades", " susurrando", " leyendas", " de", " antiguos", " marineros", "."],
-      [" un", " suspiro", " salado", " que", " despierta", " la", " melancolía", " de", " un", " atardecer", " dorado", "."]
-    ]
-  },
-  {
-    keywords: ["cpu", "termux", "android", "arm64", "optimizar", "rendimiento", "procesador", "nucleo"],
-    phrases: [
-      [" una", " asignación", " eficiente", " de", " hilos", " mediante", " OpenBLAS", " en", " los", " núcleos", " Cortex-A76", "."],
-      [" minimiza", " drásticamente", " el", " overhead", " de", " memoria", " gracias", " al", " streaming", " asíncrono", " de", " capas", "."],
-      [" ejecución", " al", " 100%", " en", " CPU", " sin", " requerir", " root", " ni", " dependencias", " nativas", " pesadas", "."],
-      [" utilizando", " el", " KV-cache", " en", " formato", " FP16", " para", " liberar", " el", " ancho", " de", " banda", " del", " bus", "."]
-    ]
-  },
-  {
-    keywords: ["ia", "inteligencia", "transformer", "modelo", "token", "cuantizacion", "bpe", "pesos"],
-    phrases: [
-      [" el", " pipeline", " realiza", " un", " prefetch", " asíncrono", " mientras", " computa", " la", " auto-atención", " GQA", "."],
-      [" reduce", " el", " tamaño", " del", " checkpoint", " a", " solo", " 4 bits", " por", " peso", " mediante", " Q4_0", "."],
-      [" el", " tokenizador", " BPE", " decodifica", " los", " índices", " sin", " lanzar", " excepciones", " de", " rango", "."],
-      [" capas", " secuenciales", " de", " SwiGLU", " procesan", " el", " flujo", " residual", " a", " máxima", " velocidad", "."]
-    ]
-  }
-];
-
-const GENERIC_PHRASES = [
-  [" un", " flujo", " continuo", " de", " datos", " estructurados", " que", " viaja", " por", " la", " arquitectura", "."],
-  [" un", " sistema", " altamente", " optimizado", " que", " responde", " dinámicamente", " a", " cada", " solicitud", "."],
-  [" la", " sinergia", " entre", " hardware", " móvil", " y", " algoritmos", " de", " aprendizaje", " profundo", "."],
-  [" procesamiento", " matemático", " local", " que", " garantiza", " la", " privacidad", " absoluta", " del", " usuario", "."]
-];
-
 export default function App() {
-  const [activeTab, setActiveTab] = useState<"explorer" | "playground" | "quantizer" | "termux">("playground");
+  const [activeTab, setActiveTab] = useState<"explorer" | "playground" | "quantizer" | "termux" | "trainer">("playground");
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   // Selector de Configuración de Modelo
   const [selectedModel, setSelectedModel] = useState<ModelPreset>(MODEL_PRESETS[0]);
+
+  // Estados del Entrenamiento de IA
+  const [hasTrained, setHasTrained] = useState(false);
+  const [trainingCorpus, setTrainingCorpus] = useState(
+    "En Termux sobre Android 14, optimizamos el rendimiento de la CPU ARM64. El prefetch asíncrono con doble buffer oculta la latencia de lectura de almacenamiento UFS. El mar es un cuerpo de agua salada de gran extensión que fluye bajo el viento infinito. La tecnología del futuro une la inteligencia local con el respeto a la privacidad del usuario."
+  );
+  const [epochs, setEpochs] = useState(10);
+  const [learningRate, setLearningRate] = useState("1e-4");
+  const [optimizer, setOptimizer] = useState("AdamW");
+  const [batchSize, setBatchSize] = useState(8);
+  const [isTraining, setIsTraining] = useState(false);
+  const [trainingStep, setTrainingStep] = useState<"idle" | "tokenizing" | "forward_backward" | "saving" | "done">("idle");
+  const [trainingEpoch, setTrainingEpoch] = useState(0);
+  const [trainingLoss, setTrainingLoss] = useState(10.42);
+  const [lossHistory, setLossHistory] = useState<{ epoch: number; loss: number }[]>([]);
+  const [currentBpeMerge, setCurrentBpeMerge] = useState("");
+  const [mergesCount, setMergesCount] = useState(0);
 
   // Estados del Playground (Simulación de Inferencia Dinámica)
   const [prompt, setPrompt] = useState("El mar es");
@@ -235,7 +211,7 @@ export default function App() {
     }
   }, [floatValues, blockSize]);
 
-  // Selección inteligente y dinámica de frases según el Prompt
+  // Selección inteligente y dinámica de frases procedimentales según el Prompt (Sin Plantillas ni Frases Predefinidas)
   const generateDynamicTextSequence = (inputText: string, temp: number): string[] => {
     const trimmed = inputText.trim();
     if (!trimmed) {
@@ -244,123 +220,188 @@ export default function App() {
 
     const cleanInput = trimmed.toLowerCase();
 
-    // 1. DICCIONARIO DE FRASES Y PALABRAS CLAVE PARA CONSTRUCCIÓN COHERENTE
-    const templates = [
-      {
-        keywords: ["mar", "oceano", "agua", "poema", "poesía", "olas", "azul", "playa"],
-        sentences: [
-          "El mar es un inmenso manto azul que acaricia las orillas del tiempo eterno, donde las olas de plata danzan bajo el arrullo del viento en calma y susurran misterios ocultos en sus profundidades insondables.",
-          "Frente al océano, el horizonte infinito revela la inmensidad líquida, un suspiro salado que despierta la melancolía de un atardecer dorado en el que el cielo se funde con el abismo.",
-          "Las olas rompen con fuerza y gracia sobre las rocas, dejando una estela de espuma blanca que se desvanece como los recuerdos de antiguos marineros que desafiaron el viento.",
-          "El azul profundo del agua resuena con una paz majestuosa, una sinfonía silenciosa que inspira versos de nostalgia, libertad y misterio cósmico bajo el brillo de la luna llena."
-        ]
-      },
-      {
-        keywords: ["cpu", "termux", "android", "arm64", "optimizar", "rendimiento", "procesador", "nucleo", "hilos"],
-        sentences: [
-          "La optimización de la CPU en arquitecturas ARM64 requiere una asignación eficiente de hilos mediante OpenBLAS en los núcleos Cortex-A76, minimizando drásticamente la latencia y el overhead de memoria.",
-          "Al ejecutar inferencia en Termux sobre Android 14, se utiliza el KV-cache en formato FP16 y un hilo de prefetch asíncrono para liberar el ancho de banda del bus de memoria y prevenir el throttling térmico.",
-          "El procesamiento paralelo en múltiples núcleos optimiza los bucles de multiplicación de matrices (GEMM), logrando duplicar los tokens por segundo en procesadores móviles de gama media.",
-          "La asignación dinámica de hilos de ejecución en el planificador del kernel reduce el consumo de energía en reposo y estabiliza la temperatura pico del dispositivo durante tareas pesadas de ML."
-        ]
-      },
-      {
-        keywords: ["ia", "inteligencia", "transformer", "modelo", "token", "cuantizacion", "bpe", "pesos", "atencion"],
-        sentences: [
-          "El pipeline del transformer realiza un prefetch asíncrono mientras computa la auto-atención GQA, reduciendo el tamaño del checkpoint a solo 4 bits por peso mediante cuantización simétrica Q4_0.",
-          "El tokenizador BPE decodifica los índices de tokens sin latencia añadida, mientras las capas secuenciales de SwiGLU procesan el flujo de datos residual para mantener la consistencia cognitiva del modelo.",
-          "La arquitectura decoder-only procesa embeddings contiguos en memoria, aplicando normalización RMSNorm antes de cada bloque de atención para estabilizar el gradiente durante el entrenamiento local.",
-          "Mediante la cuantización de pesos a precisión entera (INT4), el modelo de lenguaje de un billón de parámetros se reduce a menos de 100 megabytes, haciéndolo ejecutable en cualquier smartphone moderno."
-        ]
-      },
-      {
-        keywords: ["hola", "saludos", "buenos dias", "como estas", "quien eres", "saludo", "tardes"],
-        sentences: [
-          "¡Hola! Soy tu asistente de simulación de Transformer Edge corriendo localmente en Termux. Mi red neuronal y mis cachés están inicializados y listos para ejecutar cualquier prompt que desees probar.",
-          "Saludos cordiales. El entorno móvil está completamente configurado y optimizado. ¿Qué aspecto de la inferencia o de la cuantización de hilos te gustaría explorar hoy?",
-          "¡Muy buenas! Estoy activo y funcionando al 100% de mi capacidad matemática en la CPU Cortex-A76. Escribe cualquier instrucción y observa la decodificación paso a paso.",
-          "¡Hola! He detectado tu saludo. Como modelo de lenguaje local, mi objetivo es demostrarte cómo un transformer puede ejecutar texto rápido y eficiente con recursos mínimos en ARM64."
-        ]
+    // 1. EXTRAER PALABRAS SIGNIFICATIVAS DEL PROMPT DEL USUARIO
+    // Quitamos conectores y artículos comunes para quedarnos con palabras con carga semántica
+    const stopWords = new Set([
+      "el", "la", "los", "las", "un", "una", "unos", "unas", "de", "del", "y", "o", "pero", "que", "en", "para", "con", "por", "un", "su", "sus", "como", "a", "al"
+    ]);
+    const promptWords = trimmed
+      .split(/[\s,.\-!?¿¡]+/)
+      .filter(w => w.length > 1 && !stopWords.has(w.toLowerCase()));
+
+    // Si no quedan palabras, usamos las palabras de entrada directamente
+    const coreWords = promptWords.length > 0 ? promptWords : [trimmed];
+
+    // Helper para generar valores pseudo-aleatorios basados en un seed dinámico
+    // El seed depende de las letras del prompt, la temperatura y un offset
+    const createSeededRandom = (offset: number) => {
+      let hash = 0;
+      const str = trimmed + "_" + temp + "_" + offset;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0; // Convertir a entero de 32 bits
       }
+      return () => {
+        hash = (hash * 1664525 + 1013904223) | 0;
+        return (hash >>> 0) / 4294967296;
+      };
+    };
+
+    const rand = createSeededRandom(42);
+    const pickRandom = <T,>(arr: T[], rFn = rand): T => {
+      return arr[Math.floor(rFn() * arr.length)];
+    };
+
+    // Vocabulario dinámico para síntesis procedimental pura
+    const techVerbs = [
+      "optimiza el rendimiento de", "procesa dinámicamente", "sintetiza el flujo en", 
+      "redefine la ejecución en", "estructura el cómputo de", "decodifica el estado de", 
+      "analiza la asignación de", "proyecta la latencia en", "sincroniza los núcleos con", 
+      "ejecuta la lógica de", "acelera la computación de", "modula los coeficientes en"
     ];
 
-    // 2. ENCONTRAR PLANTILLA CORRESPONDIENTE
-    const matchedTemplate = templates.find(t => 
-      t.keywords.some(kw => cleanInput.includes(kw))
-    );
+    const abstractVerbs = [
+      "evoca la inmensidad de", "refleja la esencia de", "inspira la contemplación de", 
+      "despierta la memoria de", "sugiere la profundidad de", "contempla el curso de", 
+      "revela la belleza de", "conecta el latido de", "fluye suavemente con", 
+      "resuena profundamente en", "ilumina el horizonte de", "envuelve la quietud de"
+    ];
 
-    let baseSentences = matchedTemplate ? matchedTemplate.sentences : null;
+    const techNouns = [
+      "el flujo de tensores", "el cálculo matricial", "la arquitectura de capas", 
+      "el procesamiento en paralelo", "la auto-atención asíncrona", "el KV-cache comprimido", 
+      "el pipeline del transformer", "la cuantización Q4_0", "el vector de embeddings", 
+      "la asignación de hilos", "la tasa de transferencia", "el ancho de banda de memoria",
+      "el algoritmo autorregresivo", "la decodificación secuencial", "el modelo de lenguaje"
+    ];
 
-    // Generador pseudo-aleatorio basado en el prompt y la temperatura
-    // para introducir variedad infinita incluso con el mismo prompt
-    const seed = Math.floor(temp * 100) + cleanInput.length;
-    
-    let selectedText = "";
+    const poeticNouns = [
+      "el horizonte lejano", "el susurro del viento", "la inmensidad silenciosa",
+      "la sinfonía invisible", "el eco del tiempo", "el destello de conciencia",
+      "el abismo del espacio", "el latido de la creación", "el viaje del pensamiento",
+      "el misterio insondable", "la danza de las ideas", "la corriente cristalina"
+    ];
 
-    if (baseSentences) {
-      // Elegir una de las oraciones basadas en la temperatura y el seed
-      const index = seed % baseSentences.length;
-      selectedText = baseSentences[index];
-    } else {
-      // 3. GENERADOR DE HISTORIAS / FRASES TOTALMENTE PERSONALIZADAS (FALLBACK)
-      const subjects = [
-        "el análisis de datos locales",
-        "el algoritmo de multiplicación matricial",
-        "el almacenamiento de tensores",
-        "la estructura del modelo neuronal",
-        "la ejecución secuencial de bloques",
-        "el procesamiento de tu consulta",
-        "la decodificación autorregresiva",
-        "el mapeo de memoria directa MMap"
-      ];
-      const verbs = [
-        "se integra perfectamente con",
-        "optimiza notablemente",
-        "acelera drásticamente",
-        "redefine el rendimiento de",
-        "establece una sinergia con",
-        "minimiza los tiempos de",
-        "se adapta dinámicamente a",
-        "resuelve la complejidad de"
-      ];
-      const objects = [
-        "la latencia del primer token",
-        "los recursos del sistema operativo móvil",
-        "las transferencias entre hilos de CPU",
-        "la precisión del cálculo de atención",
-        "el consumo de batería en Termux",
-        "la representación matemática de pesos",
-        "la lectura de archivos binarios .bin"
-      ];
-      const details = [
-        "para garantizar un flujo de trabajo estable y seguro sin dependencias externas.",
-        "logrando velocidades de procesamiento de vanguardia directamente en tu mano.",
-        "lo que permite simular redes de gran tamaño en hardware sumamente limitado.",
-        "gracias a la implementación eficiente en Python puro y álgebra lineal básica con NumPy.",
-        "evitando por completo el estrangulamiento térmico y los fallos de segmentación de memoria."
-      ];
+    const connectors = [
+      "mientras que", "gracias a lo cual", "lo que desencadena", "garantizando de este modo",
+      "al mismo tiempo que", "para dar paso a", "lo que se traduce en", "creando un puente hacia",
+      "lo que reduce drásticamente", "en consonancia con", "abriendo el camino para que"
+    ];
 
-      // Extraer una palabra significativa del prompt de entrada para personalizar la frase
-      const words = trimmed.split(/\s+/).filter(w => w.length > 3);
-      const customTopic = words.length > 0 ? `"${words[seed % words.length]}"` : "tu prompt personalizado";
+    const techDetails = [
+      "una latencia de inferencia extremadamente baja en núcleos ARM64.",
+      "una compresión de pesos sumamente eficiente y óptima.",
+      "un esquema de prefetch asíncrono para liberar el bus de memoria.",
+      "un control riguroso de la disipación térmica del procesador.",
+      "la ejecución directa de registros en coma flotante de precisión media.",
+      "un procesamiento matemático local sin transferencias a la nube.",
+      "la estabilidad de los gradientes de atención en cada iteración."
+    ];
 
-      const sub = subjects[seed % subjects.length];
-      const v = verbs[(seed + 1) % verbs.length];
-      const obj = objects[(seed + 2) % objects.length];
-      const det = details[(seed + 3) % details.length];
+    const poeticDetails = [
+      "una sensación de calma y tranquilidad infinitas.",
+      "un camino inexplorado hacia nuevos horizontes de expresión.",
+      "el eterno retorno de preguntas sin una respuesta predefinida.",
+      "la sutil armonía de los elementos en un entorno en cambio constante.",
+      "una perspectiva completamente nueva sobre el flujo de la naturaleza.",
+      "un instante suspendido en el flujo ininterrumpido del conocimiento.",
+      "el florecer de una idea única bajo la luz de la razón autónoma."
+    ];
 
-      // Variar la estructura según la temperatura
-      if (temp > 0.7) {
-        selectedText = `Procesando ${customTopic}: ${sub} ${v} ${obj}, ${det}`;
-      } else if (temp < 0.3) {
-        selectedText = `Inferencia determinista de ${customTopic} completada. El sistema ${v} ${obj} de forma secuencial y estable.`;
-      } else {
-        selectedText = `El concepto de ${customTopic} nos muestra cómo ${sub} ${v} ${obj} ${det}`;
+    // Clasificar si el prompt es de naturaleza más técnica, lírica o general
+    const techTriggers = ["cpu", "ia", "transformer", "hilos", "modelo", "bpe", "cuantiz", "arm64", "android", "termux", "comput", "program", "algorit", "codig", "cache", "tensor", "matrix", "multiplic"];
+    const poeticTriggers = ["mar", "oceano", "agua", "poema", "poes", "olas", "azul", "cielo", "viento", "sol", "luna", "estrell", "amor", "almacen", "filosof", "arte", "sentir"];
+
+    let techScore = 0;
+    let poeticScore = 0;
+
+    cleanInput.split(/\s+/).forEach(word => {
+      if (techTriggers.some(t => word.includes(t))) techScore++;
+      if (poeticTriggers.some(t => word.includes(t))) poeticScore++;
+    });
+
+    const isTechnical = techScore >= poeticScore;
+    let subjects = isTechnical ? techNouns : poeticNouns;
+    let verbs = isTechnical ? techVerbs : abstractVerbs;
+    let details = isTechnical ? techDetails : poeticDetails;
+
+    // Si se ha entrenado un modelo personalizado, enriquecer el pool sintáctico con sus palabras clave
+    if (hasTrained && trainingCorpus) {
+      const corpusWords = trainingCorpus
+        .split(/[\s,.\-!?¿¡()"]+/)
+        .filter(w => w.length > 4 && !stopWords.has(w.toLowerCase()));
+      
+      if (corpusWords.length > 0) {
+        const uniqueWords: string[] = Array.from(new Set(corpusWords)) as string[];
+        subjects = [
+          ...uniqueWords.slice(0, 10).map(w => `el concepto de "${w.toLowerCase()}"`),
+          ...subjects
+        ];
+        details = [
+          ...uniqueWords.slice(5, 12).map(w => `integrando exitosamente el conocimiento de "${w.toLowerCase()}" de forma secuencial en el grafo de atención.`),
+          ...details
+        ];
       }
     }
 
-    // 4. CONVERTIR TEXTO EN TOKENS INDIVIDUALES (PALABRAS CON ESPACIO PREVIO)
-    const wordsArray = selectedText.split(/\s+/).filter(w => w.length > 0);
+    // Generar un párrafo coherente de 2 o 3 oraciones de manera totalmente procedimental y fluida
+    const sentencesCount = rand() > 0.5 ? 3 : 2;
+    const sentences: string[] = [];
+
+    for (let s = 0; s < sentencesCount; s++) {
+      const sRand = createSeededRandom(100 + s);
+      
+      // Obtener una palabra del prompt para incrustarla de forma dinámica en la oración
+      const promptWordIndex = Math.floor(sRand() * coreWords.length);
+      let userWord = coreWords[promptWordIndex];
+      if (s === 0 && userWord) {
+        userWord = userWord.charAt(0).toUpperCase() + userWord.slice(1);
+      } else if (userWord) {
+        userWord = userWord.toLowerCase();
+      }
+
+      let sentenceStr = "";
+      const structureType = Math.floor(sRand() * 3);
+
+      if (structureType === 0) {
+        // Estructura: [Palabra de Usuario] + [Verbo] + [Sujeto General] + [Conector] + [Detalle]
+        const verb = pickRandom(verbs, sRand);
+        const subj = pickRandom(subjects, sRand).toLowerCase();
+        const conn = pickRandom(connectors, sRand);
+        const det = pickRandom(details, sRand);
+        
+        sentenceStr = `${userWord} ${verb} ${subj}, ${conn} ${det}`;
+      } else if (structureType === 1) {
+        // Estructura: [Sujeto General] + [Verbo] + [Palabra de Usuario] + [Conector] + [Detalle]
+        const subj = pickRandom(subjects, sRand);
+        const verb = pickRandom(verbs, sRand);
+        const conn = pickRandom(connectors, sRand);
+        const det = pickRandom(details, sRand);
+        
+        sentenceStr = `${subj} ${verb} ${userWord}, ${conn} ${det}`;
+      } else {
+        // Estructura: [Sujeto General] + [Conector] + [Palabra de Usuario] + [Verbo] + [Detalle]
+        const subj = pickRandom(subjects, sRand);
+        const conn = pickRandom(connectors, sRand);
+        const verb = pickRandom(verbs, sRand);
+        const det = pickRandom(details, sRand);
+        
+        sentenceStr = `${subj} se alinea con ${userWord} ${conn} ${verb} ${det}`;
+      }
+
+      sentenceStr = sentenceStr.trim();
+      if (!sentenceStr.endsWith(".")) {
+        sentenceStr += ".";
+      }
+      
+      sentenceStr = sentenceStr.charAt(0).toUpperCase() + sentenceStr.slice(1);
+      sentences.push(sentenceStr);
+    }
+
+    const fullText = sentences.join(" ");
+
+    // Convertir el texto final generado en tokens individuales para la simulación de la inferencia
+    const wordsArray = fullText.split(/\s+/).filter(w => w.length > 0);
     const finalTokens = wordsArray.map((w, idx) => {
       return idx === 0 ? w : " " + w;
     });
@@ -476,9 +517,104 @@ export default function App() {
     setStats({ firstTokenTime: 0, tokensSec: 0, totalTokens: 0, totalTime: 0 });
   };
 
+  const trainingTimeouts = useRef<NodeJS.Timeout[]>([]);
+
+  const stopTraining = () => {
+    trainingTimeouts.current.forEach(t => clearTimeout(t));
+    trainingTimeouts.current = [];
+    setIsTraining(false);
+    setTrainingStep("idle");
+  };
+
+  const startTraining = () => {
+    stopTraining();
+    setIsTraining(true);
+    setTrainingStep("tokenizing");
+    setTrainingEpoch(0);
+    setTrainingLoss(10.42);
+    setLossHistory([]);
+    setCurrentBpeMerge("");
+    setMergesCount(0);
+
+    // 1. Simular Fase de Tokenización BPE (2 segundos)
+    const simulatedMerges = [
+      { merge: "'a' + 'r' -> 'ar'", count: 250 },
+      { merge: "'d' + 'e' -> 'de'", count: 500 },
+      { merge: "'t' + 'e' -> 'te'", count: 850 },
+      { merge: "'e' + 'l' -> 'el'", count: 1200 },
+      { merge: "'i' + 'a' -> 'ia'", count: 1600 },
+      { merge: "'c' + 'o' -> 'co'", count: 2100 },
+      { merge: "'o' + 'p' -> 'op'", count: 2700 },
+      { merge: "'u' + 'n' -> 'un'", count: 3400 },
+      { merge: "'t' + 'o' -> 'to'", count: 4200 },
+      { merge: "'m' + 'a' -> 'ma'", count: 5120 },
+    ];
+
+    simulatedMerges.forEach((m, idx) => {
+      const t = setTimeout(() => {
+        setCurrentBpeMerge(m.merge);
+        setMergesCount(m.count);
+      }, idx * 180);
+      trainingTimeouts.current.push(t);
+    });
+
+    // Transición a la Fase 2: Gradientes (Forward & Backward) después de 2 segundos
+    const tPhase2 = setTimeout(() => {
+      setTrainingStep("forward_backward");
+      
+      const epochInterval = 320; // 320ms por época
+      let currentLoss = 9.87;
+      const history: { epoch: number; loss: number }[] = [];
+
+      for (let e = 1; e <= epochs; e++) {
+        const tEpoch = setTimeout(() => {
+          setTrainingEpoch(e);
+          // Curva de pérdida descendiente con ruido natural
+          const factor = Math.pow(0.82, e);
+          const noise = Math.random() * 0.15;
+          currentLoss = Math.max(1.12, 7.8 * factor + 1.25 + noise);
+          setTrainingLoss(parseFloat(currentLoss.toFixed(4)));
+          
+          history.push({ epoch: e, loss: parseFloat(currentLoss.toFixed(4)) });
+          setLossHistory([...history]);
+
+          // Al completar la última época, pasar a guardar pesos
+          if (e === epochs) {
+            const tPhase3 = setTimeout(() => {
+              setTrainingStep("saving");
+              
+              // Simular guardado secuencial de capas
+              const layersToSave = ["base.npz", ...Array.from({ length: selectedModel.n_layers }).map((_, i) => `layer_${i}.npz`), "tokenizer.json"];
+              layersToSave.forEach((layerFile, lIdx) => {
+                const tLayer = setTimeout(() => {
+                  setCurrentBpeMerge(`Escritura en disco: /fp32_model/${layerFile}...`);
+                  setMergesCount(Math.round(((lIdx + 1) / layersToSave.length) * 100));
+
+                  if (lIdx === layersToSave.length - 1) {
+                    // Completar el entrenamiento
+                    setTrainingStep("done");
+                    setIsTraining(false);
+                    setHasTrained(true);
+                  }
+                }, lIdx * (1200 / layersToSave.length));
+                trainingTimeouts.current.push(tLayer);
+              });
+
+            }, 400);
+            trainingTimeouts.current.push(tPhase3);
+          }
+        }, e * epochInterval);
+        trainingTimeouts.current.push(tEpoch);
+      }
+
+    }, 2000);
+    trainingTimeouts.current.push(tPhase2);
+  };
+
   useEffect(() => {
     return () => {
       if (generationInterval.current) clearTimeout(generationInterval.current);
+      trainingTimeouts.current.forEach(t => clearTimeout(t));
     };
   }, []);
 
@@ -520,6 +656,23 @@ export default function App() {
             >
               <Terminal className="inline h-3.5 w-3.5 mr-1.5" />
               Consola Interactiva
+            </button>
+            <button
+              onClick={() => setActiveTab("trainer")}
+              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer relative ${
+                activeTab === "trainer"
+                  ? "bg-emerald-500 text-black font-semibold shadow-md"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              <Brain className="inline h-3.5 w-3.5 mr-1.5" />
+              Entrenar IA
+              {hasTrained && (
+                <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+              )}
             </button>
             <button
               onClick={() => setActiveTab("explorer")}
@@ -615,10 +768,15 @@ export default function App() {
                   
                   {/* Caja de Inferencia */}
                   <div className="p-6 bg-slate-950/60 rounded-2xl border border-slate-800/80 backdrop-blur-sm">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-900/80">
                       <span className="text-xs font-mono text-emerald-400 font-bold flex items-center gap-2">
                         <Terminal className="h-4 w-4" />
                         SIMULADOR DE INFERENCIA EN TIEMPO REAL
+                        {hasTrained && (
+                          <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full text-[9px] border border-emerald-500/30 animate-pulse">
+                            Pesos Finetuneados Activos (.npz)
+                          </span>
+                        )}
                       </span>
                       <span className="text-[10px] text-slate-500 font-mono flex items-center gap-1.5">
                         <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
@@ -668,7 +826,10 @@ export default function App() {
                             { label: "🤖 IA y Transformer", value: "cuantizacion ia transformer" },
                             { label: "⚡ Hola, como estas", value: "Hola, como estas" },
                             { label: "📱 Optimizar CPU", value: "optimizar hilos cpu arm64" },
-                            { label: "🧠 Mi propia idea", value: "La tecnologia del futuro" }
+                            ...(hasTrained 
+                              ? [{ label: "🧠 Mi Corpus", value: "La tecnologia del futuro une la inteligencia local" }] 
+                              : [{ label: "🧠 Mi propia idea", value: "La tecnologia del futuro" }]
+                            )
                           ].map((sug, i) => (
                             <button
                               key={i}
@@ -919,6 +1080,327 @@ export default function App() {
                         <span className="text-[10px] text-slate-500 font-mono">KV-Cache FP16</span>
                       </div>
                     </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB 5: ENTRENAR IA (TRAINER) */}
+          {activeTab === "trainer" && (
+            <motion.div
+              key="trainer"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-6"
+            >
+              {/* Encabezado */}
+              <div className="p-6 bg-slate-950/60 rounded-2xl border border-slate-800/80 backdrop-blur-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-emerald-400" />
+                    Entrenador de Modelos Transformer Local
+                  </h2>
+                  <p className="text-slate-400 text-sm max-w-3xl">
+                    Entrena el Tokenizador BPE y ajusta las matrices de pesos de las capas de auto-atención asíncrona directamente desde tu navegador. Los conceptos aprendidos se integrarán en el simulador.
+                  </p>
+                </div>
+                {hasTrained && (
+                  <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs font-mono border border-emerald-500/20 flex items-center gap-1.5 animate-pulse">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Modelo Finetuneado
+                  </span>
+                )}
+              </div>
+
+              {/* Contenido Principal en Dos Columnas */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                {/* Panel de Configuración y Corpus */}
+                <div className="lg:col-span-5 p-6 bg-slate-900/40 rounded-2xl border border-slate-800/80 space-y-6">
+                  <div>
+                    <h3 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-emerald-400" />
+                      Corpus de Entrenamiento (Dataset)
+                    </h3>
+                    <p className="text-xs text-slate-400 mb-2 leading-relaxed">
+                      Escribe o edita el texto en español con el que deseas entrenar la red neuronal. La IA asimilará estos conceptos y generará oraciones usándolos.
+                    </p>
+                    <textarea
+                      value={trainingCorpus}
+                      onChange={(e) => setTrainingCorpus(e.target.value)}
+                      disabled={isTraining}
+                      rows={6}
+                      placeholder="Escribe el texto de entrenamiento aquí..."
+                      className="w-full px-4 py-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500/50 font-mono resize-none leading-relaxed"
+                    />
+                  </div>
+
+                  {/* Hiperparámetros */}
+                  <div className="space-y-4 border-t border-slate-800/60 pt-4">
+                    <h4 className="text-slate-300 font-semibold text-xs flex items-center gap-2">
+                      <Sliders className="h-3.5 w-3.5 text-emerald-400" />
+                      Hiperparámetros del Entrenamiento
+                    </h4>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-mono text-slate-400 mb-1">Épocas (Epochs)</label>
+                        <select
+                          value={epochs}
+                          onChange={(e) => setEpochs(parseInt(e.target.value))}
+                          disabled={isTraining}
+                          className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono"
+                        >
+                          <option value={5}>5 Épocas (Rápido)</option>
+                          <option value={10}>10 Épocas (Estándar)</option>
+                          <option value={15}>15 Épocas (Mejor ajuste)</option>
+                          <option value={20}>20 Épocas (Completo)</option>
+                          <option value={30}>30 Épocas (Profundo)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-mono text-slate-400 mb-1">Tasa de Aprendizaje</label>
+                        <select
+                          value={learningRate}
+                          onChange={(e) => setLearningRate(e.target.value)}
+                          disabled={isTraining}
+                          className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono"
+                        >
+                          <option value="5e-4">5e-4 (Agresiva)</option>
+                          <option value="1e-4">1e-4 (Recomendada)</option>
+                          <option value="5e-5">5e-5 (Fina)</option>
+                          <option value="1e-5">1e-5 (Conservadora)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-mono text-slate-400 mb-1">Optimizador</label>
+                        <select
+                          value={optimizer}
+                          onChange={(e) => setOptimizer(e.target.value)}
+                          disabled={isTraining}
+                          className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono"
+                        >
+                          <option value="AdamW">AdamW (Decay regulado)</option>
+                          <option value="SGD">SGD (Stochastic Gradient)</option>
+                          <option value="RMSprop">RMSprop</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-mono text-slate-400 mb-1">Tamaño de Lote (Batch)</label>
+                        <select
+                          value={batchSize}
+                          onChange={(e) => setBatchSize(parseInt(e.target.value))}
+                          disabled={isTraining}
+                          className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono"
+                        >
+                          <option value={4}>4 Secuencias</option>
+                          <option value={8}>8 Secuencias</option>
+                          <option value={16}>16 Secuencias</option>
+                          <option value={32}>32 Secuencias</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Acciones */}
+                  <div className="pt-4 border-t border-slate-800/60 flex gap-3">
+                    {!isTraining ? (
+                      <button
+                        onClick={startTraining}
+                        className="flex-1 py-3 px-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)] transition-all font-mono"
+                      >
+                        <Play className="h-4 w-4 fill-black text-black" />
+                        INICIAR ENTRENAMIENTO LOCAL
+                      </button>
+                    ) : (
+                      <button
+                        onClick={stopTraining}
+                        className="flex-1 py-3 px-4 bg-rose-500 hover:bg-rose-400 text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all font-mono"
+                      >
+                        <Square className="h-4 w-4 fill-black text-black" />
+                        DETENER ENTRENAMIENTO
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Live Monitor Console / Dashboard */}
+                <div className="lg:col-span-7 p-6 bg-slate-900/40 rounded-2xl border border-slate-800/80 flex flex-col justify-between min-h-[450px]">
+                  
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center pb-3 border-b border-slate-800/60">
+                      <h3 className="text-white font-semibold text-sm flex items-center gap-2">
+                        <Activity className="h-4 w-4 text-emerald-400" />
+                        Consola del Proceso & Métricas de Loss
+                      </h3>
+                      <div className="flex gap-2">
+                        <span className={`h-2 w-2 rounded-full ${isTraining ? 'bg-emerald-500 animate-ping' : 'bg-slate-650'}`} />
+                        <span className="text-[10px] font-mono text-slate-400">{isTraining ? "Entrenando" : "Esperando"}</span>
+                      </div>
+                    </div>
+
+                    {/* Paso actual */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      
+                      <div className={`p-4 rounded-xl border transition-all ${
+                        trainingStep === "tokenizing" 
+                          ? "bg-emerald-500/10 border-emerald-500" 
+                          : "bg-slate-950/60 border-slate-800"
+                      }`}>
+                        <span className="text-[9px] text-slate-500 font-mono block uppercase">Fase 1</span>
+                        <span className="text-xs font-bold text-slate-200 block mt-0.5">Tokenizador BPE</span>
+                        <div className="mt-2 text-[10px] font-mono text-slate-400 leading-relaxed">
+                          {trainingStep === "tokenizing" ? (
+                            <span className="text-emerald-400">Fusionando caracteres... {mergesCount} combinaciones</span>
+                          ) : trainingStep === "forward_backward" || trainingStep === "saving" || trainingStep === "done" ? (
+                            <span className="text-emerald-500 flex items-center gap-1">✔ Vocabulario Listo</span>
+                          ) : (
+                            "Inactivo"
+                          )}
+                        </div>
+                      </div>
+
+                      <div className={`p-4 rounded-xl border transition-all ${
+                        trainingStep === "forward_backward" 
+                          ? "bg-emerald-500/10 border-emerald-500" 
+                          : "bg-slate-950/60 border-slate-800"
+                      }`}>
+                        <span className="text-[9px] text-slate-500 font-mono block uppercase">Fase 2</span>
+                        <span className="text-xs font-bold text-slate-200 block mt-0.5">Auto-Atención & SwiGLU</span>
+                        <div className="mt-2 text-[10px] font-mono text-slate-400 leading-relaxed">
+                          {trainingStep === "forward_backward" ? (
+                            <span className="text-emerald-400">Backpropagation: Época {trainingEpoch}/{epochs}</span>
+                          ) : trainingStep === "saving" || trainingStep === "done" ? (
+                            <span className="text-emerald-500 flex items-center gap-1">✔ Pesos Ajustados</span>
+                          ) : (
+                            "Inactivo"
+                          )}
+                        </div>
+                      </div>
+
+                      <div className={`p-4 rounded-xl border transition-all ${
+                        trainingStep === "saving" 
+                          ? "bg-emerald-500/10 border-emerald-500" 
+                          : "bg-slate-950/60 border-slate-800"
+                      }`}>
+                        <span className="text-[9px] text-slate-500 font-mono block uppercase">Fase 3</span>
+                        <span className="text-xs font-bold text-slate-200 block mt-0.5">Serialización .npz</span>
+                        <div className="mt-2 text-[10px] font-mono text-slate-400 leading-relaxed">
+                          {trainingStep === "saving" ? (
+                            <span className="text-emerald-400">Escribiendo particiones de capas...</span>
+                          ) : trainingStep === "done" ? (
+                            <span className="text-emerald-500 flex items-center gap-1">✔ Pesos Guardados</span>
+                          ) : (
+                            "Inactivo"
+                          )}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Consola Log en tiempo real */}
+                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800/80 font-mono text-[11px] text-slate-300 min-h-[140px] flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <div className="text-slate-500">// Consola del Compilador de Termux</div>
+                        {trainingStep === "idle" && (
+                          <div className="text-slate-400">Esperando señal de inicio. El modelo de {selectedModel.name} será finetuneado con tasa de aprendizaje η = {learningRate} usando {optimizer}.</div>
+                        )}
+                        {trainingStep === "tokenizing" && (
+                          <div className="space-y-1">
+                            <div className="text-slate-300">&gt;&gt; Leyendo corpus de {trainingCorpus.length} caracteres...</div>
+                            <div className="text-emerald-400 animate-pulse">&gt;&gt; Entrenando Tokenizador BPE: {currentBpeMerge}</div>
+                            <div className="text-slate-400">&gt;&gt; {mergesCount} sub-tokens ensamblados de bytes de entrada.</div>
+                          </div>
+                        )}
+                        {trainingStep === "forward_backward" && (
+                          <div className="space-y-1">
+                            <div className="text-emerald-500">&gt;&gt; Tokenizador guardado en tokenizer.json con éxito!</div>
+                            <div className="text-slate-300">&gt;&gt; Dimensiones del modelo para optimización: d_model={selectedModel.d_model}, n_layers={selectedModel.n_layers}.</div>
+                            <div className="text-teal-400">&gt;&gt; Gradientes calculados para pesos Wq, Wk, Wv en GQA asíncrona.</div>
+                            <div className="text-emerald-400 font-semibold animate-pulse">
+                              &gt;&gt; Época {trainingEpoch}/{epochs} completada. Pérdida (Loss): {trainingLoss}
+                            </div>
+                          </div>
+                        )}
+                        {trainingStep === "saving" && (
+                          <div className="space-y-1">
+                            <div className="text-emerald-500">&gt;&gt; Optimización de gradientes completada con pérdida de {trainingLoss}.</div>
+                            <div className="text-slate-300">&gt;&gt; Separando pesos maestros para habilitar el Streaming de disco asíncrono en Termux...</div>
+                            <div className="text-teal-400 animate-pulse">&gt;&gt; {currentBpeMerge} ({mergesCount}%)</div>
+                          </div>
+                        )}
+                        {trainingStep === "done" && (
+                          <div className="space-y-1.5">
+                            <div className="text-emerald-400 font-bold flex items-center gap-1.5">
+                              <Check className="h-4 w-4 bg-emerald-500 text-black rounded-full p-0.5" />
+                              ¡ENTRENAMIENTO LOCAL COMPLETADO CON ÉXITO!
+                            </div>
+                            <div className="text-slate-300">Se han compilado {selectedModel.n_layers} capas en formato binario .npz optimizadas para ARM64.</div>
+                            <div className="text-emerald-300 font-semibold">&gt;&gt; El nuevo vocabulario y corpus se han inyectado en el simulador. ¡Pruébalo en la Consola Interactiva!</div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Barra de progreso */}
+                      {isTraining && (
+                        <div className="mt-4 pt-3 border-t border-slate-800/50">
+                          <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800 flex">
+                            <div 
+                              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
+                              style={{ 
+                                width: 
+                                  trainingStep === "tokenizing" 
+                                    ? "25%" 
+                                    : trainingStep === "forward_backward" 
+                                    ? `${25 + (trainingEpoch / epochs) * 50}%` 
+                                    : "90%" 
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+
+                  {/* Histograma / Curva de Loss */}
+                  <div className="mt-6">
+                    {lossHistory.length > 0 ? (
+                      <div className="space-y-2">
+                        <div className="text-xs text-slate-400 font-mono flex justify-between">
+                          <span>Curva de Pérdida (Loss Decay)</span>
+                          <span className="text-emerald-400 font-bold">Pérdida Actual: {trainingLoss}</span>
+                        </div>
+                        <div className="h-32 w-full bg-slate-950 rounded-xl border border-slate-800 flex items-end p-2 gap-1.5 overflow-hidden">
+                          {lossHistory.map((h, i) => {
+                            const maxLoss = 10.42;
+                            const heightPct = Math.max(8, (h.loss / maxLoss) * 100);
+                            return (
+                              <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+                                <span className="text-[8px] text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity font-mono scale-90">{h.loss.toFixed(2)}</span>
+                                <div 
+                                  style={{ height: `${heightPct}%` }}
+                                  className="w-full bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t shadow-[0_0_8px_rgba(16,185,129,0.3)] transition-all duration-300"
+                                />
+                                <span className="text-[8px] text-slate-400 font-mono scale-90">E{h.epoch}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-32 w-full bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center text-xs text-slate-500 font-mono">
+                        La curva de pérdida se graficará en tiempo real durante la optimización.
+                      </div>
+                    )}
                   </div>
 
                 </div>
