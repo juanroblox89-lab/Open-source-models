@@ -1,6 +1,15 @@
 # config.py
 # Única fuente de verdad para todos los hiperparámetros del modelo y el tokenizador.
 
+import os
+# Optimizar el subproceso de álgebra lineal (OpenBLAS/MKL/etc) para usar un número eficiente de hilos.
+# Por defecto en el Redmi Note 14 (Dimensity 6100+) se prefiere usar 2-4 hilos para evitar
+# que la sobrecarga de sincronización degrade el rendimiento en los núcleos Cortex-A55 pequeños.
+# Configurando estas variables antes de que NumPy se importe por primera vez.
+for env_var in ["OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"]:
+    if env_var not in os.environ:
+        os.environ[env_var] = "4"
+
 # Configuración del Modelo E (Elegida para producción en Termux)
 MODEL_CONFIG = {
     'vocab_size': 32000,

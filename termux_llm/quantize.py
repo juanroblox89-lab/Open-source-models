@@ -49,17 +49,29 @@ def dequantize_q4_0(packed, scale, shape, block_size=32):
 def quantize_model_directory(input_dir, output_dir, config):
     """
     Recorre el directorio del modelo FP32 base y cuantiza todas las capas al formato optimizado Q4_0.
-    Las normas (RMSNorm) y embeddings base no se cuantizan para preservar la fidelidad de la señal.
+    Las normas (RMSNorm) permanecen en FP32 por estabilidad de la señal, pero los embeddings se cuantizan
+    a Q4_0 para cumplir estrictamente con la restricción de tamaño en disco (<=300MB).
     """
     os.makedirs(output_dir, exist_ok=True)
     block_size = config.get('block_size', 32)
     
-    # Copiar base.npz (contiene embeddings y normas finales no cuantizadas por estabilidad)
+    # Cuantizar base.npz (embeddings se cuantizan a Q4_0, final_norm permanece en FP32)
     base_src = os.path.join(input_dir, 'base.npz')
     base_dst = os.path.join(output_dir, 'base.npz')
     if os.path.exists(base_src):
-        shutil.copy(base_src, base_dst)
-        print(f"Copiados embeddings y normas base a {output_dir}")
+        base_data = np.load(base_src)
+        q_base = {}
+        for k, v in base_data.items():
+            if k == 'embeddings':
+                packed, scale = quantize_q4_0(v, block_size=block_size)
+                q_base['embeddings_packed'] = packed
+                q_base['embeddings_scale'] = scale
+                q_base['embeddings_shape'] = np.array(v.shape)
+                print(f"Cuantizados embeddings base ({v.shape}) a Q4_0")
+            else:
+                q_base[k] = v
+        np.savez(base_dst, **q_base)
+        print(f"Guardado base.npz cuantizado bajo {output_dir}")
         
     for file in os.listdir(input_dir):
         if file.endswith('.npz') and 'layer' in file:

@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "Transformer Edge",
+  "description": "An optimized implementation of an autoregressive transformer decoder-only model tailored for ARM64 CPUs running under Termux on Android.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

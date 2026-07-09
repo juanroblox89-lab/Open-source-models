@@ -49,7 +49,14 @@ def generate(prompt, tokenizer, config, max_gen_len=100):
         raise FileNotFoundError(f"No se encontró base.npz en {model_dir}. ¿Ejecutaste el pipeline de entrenamiento primero?")
         
     base = np.load(base_path)
-    embeddings = base['embeddings']
+    if 'embeddings_packed' in base:
+        packed = base['embeddings_packed']
+        scale = base['embeddings_scale']
+        shape = tuple(base['embeddings_shape'])
+        block_size = config.get('block_size', 32)
+        embeddings = dequantize_q4_0(packed, scale, shape, block_size=block_size)
+    else:
+        embeddings = base['embeddings']
     final_norm = base['final_norm']
     
     # Preasignar la memoria fija para el KV-cache deslizante (FP16 para conservar aún más memoria RAM)

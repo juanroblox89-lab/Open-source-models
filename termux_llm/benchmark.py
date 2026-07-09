@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import resource
 import subprocess
@@ -26,6 +27,12 @@ if __name__ == '__main__':
     print("          BENCHMARK SYSTEM: TRANSFORMER EDGE")
     print("=" * 55)
     
+    # Mostrar variables de entorno de hilos activas
+    print("[*] CONFIGURACIÓN DE MULTIHILO (Álgebra Lineal):")
+    for var in ["OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"]:
+        print(f"    - {var}: {os.environ.get(var, 'No definida (Usando valor de sistema)')}")
+    print("-" * 55)
+    
     # 1. Tamaño en disco
     q4_size = get_dir_size('./q4_model')
     fp32_size = get_dir_size('./fp32_model')
@@ -37,7 +44,7 @@ if __name__ == '__main__':
     
     # 3. Medición de Inferencia y Rendimiento de Generación
     print("\nEjecutando inferencia en subproceso...")
-    cmd = "python infer.py"
+    cmd = f"{sys.executable} infer.py"
     
     t0 = time.time()
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
