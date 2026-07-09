@@ -2,7 +2,7 @@ import numpy as np
 
 def rms_norm(x, weight, eps=1e-5):
     variance = np.mean(x**2, axis=-1, keepdims=True)
-    return x * np.broadcast_to(1.0 / np.sqrt(variance + eps), x.shape) * weight
+    return x * (1.0 / np.sqrt(variance + eps)) * weight
 
 def apply_rope(q, k, pos, theta=10000.0):
     seq_len, n_heads, head_dim = q.shape
@@ -31,11 +31,17 @@ def apply_rope(q, k, pos, theta=10000.0):
 def swiglu(x, W_gate, W_up, W_down):
     gate = x @ W_gate
     up = x @ W_up
-    gate = gate * (1.0 / (1.0 + np.exp(-gate))) # SiLU
+    gate = gate * (1.0 / (1.0 + np.exp(-gate))) # SiLU activation
     return (gate * up) @ W_down
 
-def gqa_attention(x, Wq, Wk, Wv, Wo, kv_cache, pos, n_heads, n_kv_heads, head_dim, window_size=512):
+def gqa_attention(x, Wq, Wk, Wv, Wo, kv_cache, pos, config):
     seq_len = x.shape[0]
+    n_heads = config['n_heads']
+    n_kv_heads = config['n_kv_heads']
+    head_dim = config['head_dim']
+    window_size = config['window_size']
+    theta = config.get('theta', 10000.0)
+    
     q = x @ Wq
     k = x @ Wk
     v = x @ Wv
@@ -44,16 +50,15 @@ def gqa_attention(x, Wq, Wk, Wv, Wo, kv_cache, pos, n_heads, n_kv_heads, head_di
     k = k.reshape(seq_len, n_kv_heads, head_dim)
     v = v.reshape(seq_len, n_kv_heads, head_dim)
     
-    q, k = apply_rope(q, k, pos)
+    q, k = apply_rope(q, k, pos, theta=theta)
     
     if kv_cache is not None:
         cache_k, cache_v = kv_cache
-        valid_len = min(pos + seq_len, window_size)
         
-        if seq_len > 1: # prefill
+        if seq_len > 1: # prefill mode
             k_use = np.concatenate([cache_k[:pos], k], axis=0)[-window_size:]
             v_use = np.concatenate([cache_v[:pos], v], axis=0)[-window_size:]
-        else: # decode
+        else: # decode mode
             cache_k = np.roll(cache_k, -1, axis=0) if pos >= window_size else cache_k
             cache_v = np.roll(cache_v, -1, axis=0) if pos >= window_size else cache_v
             insert_pos = min(pos, window_size - 1)
@@ -90,7 +95,7 @@ def transformer_block(x, weights, kv_cache, pos, config):
     norm1 = rms_norm(x, weights['attn_norm'])
     attn_out, kv_cache_out = gqa_attention(
         norm1, weights['Wq'], weights['Wk'], weights['Wv'], weights['Wo'],
-        kv_cache, pos, config['n_heads'], config['n_kv_heads'], config['head_dim'], config['window_size']
+        kv_cache, pos, config
     )
     x = x + attn_out
     
